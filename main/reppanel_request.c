@@ -956,7 +956,7 @@ void reprap_wifi_get_rreply(wifi_response_buff_t *response_buffer) {
     sprintf(request_addr, "%s/rr_reply", rep_addr_resolved);
     esp_http_client_config_t config = {
             .url = request_addr,
-            .timeout_ms = 1000,
+            .timeout_ms = REQUEST_TIMEOUT_MS,
             .event_handler = http_event_handle,
             .user_data = response_buffer
     };
@@ -1042,13 +1042,13 @@ bool reprap_wifi_send_gcode(char *gcode) {
     }
     esp_http_client_close(client);
     esp_http_client_cleanup(client);
-    if (success) {
-        if (duet_sbc_mode) {
-            // TODO: Get reply
-        } else {
-            reprap_wifi_get_rreply(&resp_buff_gui_task);
-        }
-    }
+//    if (success) {
+//        if (duet_sbc_mode) {
+//            // TODO: Get reply
+//        } else {
+//            reprap_wifi_get_rreply(&resp_buff_gui_task);
+//        }
+//    }
     return success;
 }
 
@@ -1609,7 +1609,7 @@ void request_reprap_status_updates(void *params) {
                     }
                 }
 //                if (reprap_model.reprap_seqs_changed.reply_changed) {
-//                    reprap_wifi_get_rreply(&resp_buff_status_update_task);
+//                    reprap_wifi_get_rreply(resp_buff_status_update_task);
 //                }
                 if (reprap_model.api_level >= 1) {
                     request_rrf3_extended_info(NULL, resp_buff_status_update_task);
